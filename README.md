@@ -1,224 +1,224 @@
 # ZK-Drive
 
-**Deine eigene, Ende-zu-Ende-verschlüsselte Cloud – kostenlos auf Cloudflare, in einem Klick deployt.**
+**Your own end-to-end encrypted cloud – free on Cloudflare, deployed in one click.**
 
-ZK steht für **Zero-Knowledge**: Der Server speichert deine Dateien, weiß aber nichts über sie. Alles wird im Browser verschlüsselt, bevor es hochgeladen wird. Weder Cloudflare noch der Betreiber noch jemand mit Zugriff auf die Datenbank kann Dateiinhalte, Dateinamen oder Ordnernamen lesen.
+ZK stands for **Zero-Knowledge**: The server stores your files, but knows nothing about them. Everything is encrypted in your browser before it is uploaded. Neither Cloudflare, nor the operator, nor anyone with access to the database can read file contents, file names, or folder names.
 
-- Oberfläche wie Google Drive: Ordner, Suche, Drag & Drop, Rechtsklick-Menü, Listen- und Kachelansicht
-- Kein Framework, kein Build-Step, keine Abhängigkeiten – reines HTML, CSS und JavaScript, unter 100 KB Quellcode
-- Läuft komplett im kostenlosen Cloudflare-Tarif, ohne Kreditkarte
+- Google Drive-like interface: folders, search, drag & drop, right-click menu, list and grid view
+- No framework, no build step, no dependencies – pure HTML, CSS, and JavaScript, under 100 KB of source code
+- Runs completely on Cloudflare's free tier, no credit card required
 
 ---
 
-## Inhalt
+## Contents
 
 - [Features](#features)
-- [Installation in 5 Minuten](#installation-in-5-minuten)
-- [Bedienung](#bedienung)
-- [Sicherheit & Verschlüsselung](#sicherheit--verschlüsselung)
+- [Installation in 5 Minutes](#installation-in-5-minutes)
+- [Usage](#usage)
+- [Security & Encryption](#security--encryption)
 - [Limits](#limits)
-- [Projektstruktur](#projektstruktur)
-- [Addons schreiben](#addons-schreiben)
-- [Manuelles Deployment](#manuelles-deployment)
-- [Fehlerbehebung](#fehlerbehebung)
+- [Project Structure](#project-structure)
+- [Writing Addons](#writing-addons)
+- [Manual Deployment](#manual-deployment)
+- [Troubleshooting](#troubleshooting)
 
 ---
 
 ## Features
 
-| Bereich | Was es kann |
+| Area | Capabilities |
 |---|---|
-| **Dateien** | Upload per Button oder Drag & Drop, Ordner, Umbenennen, Verschieben, Papierkorb mit Wiederherstellen |
-| **Große Dateien** | Werden im Browser in 24-MB-Stücke geteilt, einzeln verschlüsselt und parallel hochgeladen |
-| **Vorschau** | Bilder, PDFs, Text/Code, Audio und Video – entschlüsselt nur im Arbeitsspeicher |
-| **ZIP-Download** | Mehrere Dateien oder ganze Ordner als ZIP, im Browser zusammengebaut |
-| **Notizen** | Verschlüsselte `.md`/`.txt`-Notizen direkt im Drive erstellen und bearbeiten |
-| **Teilen** | Link für eine einzelne Datei, mit Ablaufzeit (1 Std / 24 Std / 7 Tage / unbegrenzt) und **Burn after reading** |
-| **Konto** | Login, Passwort ändern, Passwort-Reset per E-Mail-Code + Wiederherstellungscode |
-| **Themes** | Light, Dark und **Nightmare** (Neon-Lila/Blau) – sofort umschaltbar |
-| **Erweiterbar** | Addon-System mit Hooks für Kontextmenü, Vorschau, Toolbar und Upload |
+| **Files** | Upload via button or drag & drop, folders, rename, move, trash with restore |
+| **Large Files** | Split into 24 MB chunks in the browser, individually encrypted, and uploaded in parallel |
+| **Preview** | Images, PDFs, text/code, audio, and video – decrypted in RAM only |
+| **ZIP Download** | Multiple files or entire folders as a ZIP, assembled in the browser |
+| **Notes** | Create and edit encrypted `.md`/`.txt` notes directly inside the Drive |
+| **Sharing** | Link for a single file, with expiration time (1 hr / 24 hrs / 7 days / unlimited) and **Burn after reading** |
+| **Account** | Login, change password, password reset via email code + recovery code |
+| **Themes** | Light, Dark, and **Nightmare** (Neon Purple/Blue) – switchable instantly |
+| **Extensible** | Addon system with hooks for context menu, preview, toolbar, and upload |
 
-**Tastenkürzel:** `Strg+K` Suche · `Entf` in den Papierkorb · `F2` umbenennen · `Leertaste` Schnellvorschau · `Esc` schließen
+**Keyboard Shortcuts:** `Ctrl+K` Search · `Del` Move to trash · `F2` Rename · `Space` Quick preview · `Esc` Close
 
 ---
 
-## Installation in 5 Minuten
+## Installation in 5 Minutes
 
-Du brauchst nur ein kostenloses Cloudflare-Konto und Windows. Ein Worker muss vorher **nicht** angelegt werden, das erledigt das Skript.
+All you need is a free Cloudflare account and Windows. You do **not** need to create a Worker beforehand; the script handles that for you.
 
-### 1. Cloudflare-Konto
-Auf [dash.cloudflare.com](https://dash.cloudflare.com) registrieren und die E-Mail bestätigen.
+### 1. Cloudflare Account
+Sign up at [dash.cloudflare.com](https://dash.cloudflare.com) and verify your email.
 
-### 2. workers.dev-Subdomain festlegen
-Links auf **Workers & Pages** klicken. Rechts steht **„Your subdomain“**. Falls noch keine vergeben ist, einen Namen wählen (z. B. `meinname`). Deine Cloud ist später unter `https://cloud.meinname.workers.dev` erreichbar.
+### 2. Set your workers.dev Subdomain
+Click **Workers & Pages** on the left. On the right, you will see **"Your subdomain"**. If you haven't set one yet, choose a name (e.g., `yourname`). Your cloud will later be accessible at `https://cloud.yourname.workers.dev`.
 
-### 3. Node.js installieren
-Die **LTS**-Version von [nodejs.org](https://nodejs.org) installieren (Standardeinstellungen reichen).
+### 3. Install Node.js
+Install the **LTS** version from [nodejs.org](https://nodejs.org) (default settings are fine).
 
-### 4. Projekt herunterladen
-Repository als ZIP herunterladen (**Code → Download ZIP**) und entpacken – oder klonen:
+### 4. Download the Project
+Download the repository as a ZIP (**Code → Download ZIP**) and extract it – or clone it:
 
 ```bash
-git clone https://github.com/<dein-name>/zk-drive.git
+git clone [https://github.com/](https://github.com/)<your-name>/zk-drive.git
 ```
 
-### 5. `deploy.bat` doppelklicken
-Das Skript erledigt alles automatisch:
+### 5. Double-click `deploy.bat`
+The script handles everything automatically:
 
-1. Cloudflare-Anmeldung im Browser (einmal auf **Allow** klicken)
-2. D1-Datenbank `zk-drive` anlegen und Tabellen erstellen
-3. KV-Speicher `zk-drive-files` für die verschlüsselten Dateien anlegen
-4. Worker `cloud` hochladen
-5. Optional: Resend-API-Key für Passwort-Reset-Mails abfragen (Enter = überspringen)
+1. Cloudflare login in your browser (click **Allow** once)
+2. Creates the D1 database `zk-drive` and sets up the tables
+3. Creates the KV storage `zk-drive-files` for the encrypted files
+4. Uploads the `cloud` Worker
+5. Optional: Prompts for a Resend API key for password reset emails (press Enter to skip)
 
-Am Ende zeigt es deinen Link an. Öffnen, Konto einrichten – fertig.
+At the end, it displays your link. Open it, set up your account – done.
 
-> ⚠️ **Wiederherstellungscode sichern!** Beim Einrichten wird einmalig ein 24-stelliger Code angezeigt. Ohne ihn gibt es bei vergessenem Passwort **keinen** Weg zurück an deine Dateien – auch nicht für den Betreiber. Das ist der Preis für echtes Zero-Knowledge.
+> ⚠️ **Save your recovery code!** During setup, a 24-character code is displayed once. Without it, if you forget your password, there is **no** way to recover your files – not even for the operator. That is the price of true zero-knowledge.
 
-`deploy.bat` kann jederzeit erneut ausgeführt werden (z. B. nach Code-Änderungen). Vorhandene Daten bleiben erhalten.
+`deploy.bat` can be run again at any time (e.g., after code changes). Existing data remains intact.
 
-**Linux/macOS:** statt der `.bat` einfach `node deploy.mjs` im Projektordner ausführen.
+**Linux/macOS:** Instead of the `.bat` file, simply run `node deploy.mjs` in the project folder.
 
 ---
 
-## Bedienung
+## Usage
 
-- **Hochladen:** Dateien ins Fenster ziehen oder **+ Neu → Datei hochladen**
-- **Verschieben:** Datei auf einen Ordner oder in die Breadcrumb-Leiste ziehen, oder Rechtsklick → *Verschieben*
-- **Mehrfachauswahl:** `Strg`/`Shift` + Klick, dann Rechtsklick → *Als ZIP herunterladen*
-- **Teilen:** Rechtsklick → *Teilen*, Ablaufzeit wählen, Link kopieren
-- **Nach Neuladen der Seite** fragt die App das Passwort erneut ab – der Schlüssel liegt bewusst nur im Arbeitsspeicher, nie im Browser-Speicher.
+- **Upload:** Drag files into the window or click **+ New → Upload file**
+- **Move:** Drag a file onto a folder or into the breadcrumb bar, or right-click → *Move*
+- **Multi-select:** `Ctrl`/`Shift` + click, then right-click → *Download as ZIP*
+- **Share:** Right-click → *Share*, choose an expiration time, copy the link
+- **After reloading the page**, the app will ask for your password again – the key is intentionally kept only in RAM, never in browser storage.
 
-### Passwort vergessen
-1. Auf der Login-Seite **Passwort vergessen** → Benutzername eingeben
-2. 6-stelligen Code aus der E-Mail + Wiederherstellungscode + neues Passwort eingeben
-3. Alle Dateien bleiben erhalten, alle anderen Sitzungen werden abgemeldet
+### Forgot Password
+1. On the login page, click **Forgot password** → enter your username
+2. Enter the 6-digit code from your email + recovery code + new password
+3. All files remain intact, and all other sessions are logged out
 
-Ohne eingerichteten Mail-Key steht der Code im Worker-Log:
+If you haven't configured an email key, the code will appear in the Worker log:
 
 ```bash
 npx wrangler tail
 ```
 
-### E-Mail-Versand einrichten (optional)
-1. Konto auf [resend.com](https://resend.com) anlegen, unter **API Keys** einen Schlüssel erstellen
-2. `deploy.bat` erneut starten und den Schlüssel im letzten Schritt eingeben
+### Set up Email Delivery (Optional)
+1. Create an account at [resend.com](https://resend.com) and generate a key under **API Keys**
+2. Run `deploy.bat` again and enter the key in the final step
 
-Mit dem Standard-Absender `drive@resend.dev` stellt Resend nur an die eigene Konto-Adresse zu. Für beliebige Empfänger in Resend eine eigene Domain verifizieren und diese als Absender angeben.
+With the default sender `drive@resend.dev`, Resend only delivers to your own account email address. To send to any recipient, verify your own domain in Resend and set it as the sender.
 
 ---
 
-## Sicherheit & Verschlüsselung
+## Security & Encryption
 
-Alle Kryptografie läuft im Browser über die **Web Crypto API**. Der Server sieht nur verschlüsselte Bytes.
-
-```
-Passwort ──PBKDF2 (310.000 Runden)──┬──► Verschlüsselungsschlüssel ──► entsperrt VaultKey   (verlässt nie den Browser)
-                                    └──► Anmeldewert ──► Server (dort nochmals gehasht)
-
-VaultKey (256 Bit, zufällig)
- ├─ verschlüsselt mit Passwort         → encrypted_vault_pw
- ├─ verschlüsselt mit Recovery-Code    → encrypted_vault_recovery
- └─ verschlüsselt jeden FileKey + alle Ordnernamen
-
-FileKey (256 Bit, pro Datei)
- └─ verschlüsselt Dateiname, Typ und jeden Chunk (AES-256-GCM, eigener IV pro Chunk)
-```
-
-- **AES-256-GCM** für alle Daten, jeder Chunk mit eigenem zufälligen IV und an seine Position gebunden (vertauschte oder fehlende Chunks werden erkannt)
-- **Passwort ≠ Anmeldung:** Der Server erhält nur einen abgeleiteten Anmeldewert, niemals das Passwort oder den Schlüssel
-- **Sitzungen** als HttpOnly-/Secure-/SameSite=Strict-Cookie, in der Datenbank nur als Hash gespeichert, 30 Tage gültig
-- **Schutz:** CSRF-Prüfung, Sperre nach 5 falschen Logins (10 Min), Reset-Codes mit 15 Min Gültigkeit und max. 5 Versuchen
-
-### Wie Teilen ohne Schlüsselweitergabe funktioniert
+All cryptography runs in the browser via the **Web Crypto API**. The server only ever sees encrypted bytes.
 
 ```
-https://cloud.meinname.workers.dev/s/<shareId>#<FileKey>
-                                             └─ Fragment: wird vom Browser nie an den Server gesendet
+Password ──PBKDF2 (310,000 rounds)──┬──► Encryption Key ──► unlocks VaultKey   (never leaves the browser)
+                                    └──► Auth Value ──────► Server (hashed again server-side)
+
+VaultKey (256-bit, random)
+ ├─ encrypted with Password         → encrypted_vault_pw
+ ├─ encrypted with Recovery Code    → encrypted_vault_recovery
+ └─ encrypts every FileKey + all folder names
+
+FileKey (256-bit, per file)
+ └─ encrypts file name, type, and every chunk (AES-256-GCM, unique IV per chunk)
 ```
 
-Der Gast lädt die verschlüsselte Datei und entschlüsselt sie lokal mit dem Schlüssel aus dem `#`-Teil. Er bekommt nur diese eine Datei – kein Login, kein Zugriff auf andere Dateien. Bei **Burn after reading** wird der Link beim ersten Download-Start ungültig und die Datei nach vollständiger Übertragung gelöscht.
+- **AES-256-GCM** for all data; each chunk has its own random IV and is bound to its position (swapped or missing chunks are detected)
+- **Password ≠ Login:** The server only receives a derived authentication value, never the password or the encryption key
+- **Sessions** stored as `HttpOnly`/`Secure`/`SameSite=Strict` cookies, saved in the database only as hashes, valid for 30 days
+- **Protection:** CSRF checks, lockout after 5 failed logins (10 min), reset codes valid for 15 min with max. 5 attempts
 
-### Was der Server trotzdem sieht
-Zero-Knowledge betrifft Inhalte und Namen. Sichtbar bleiben **Metadaten**: Dateigrößen, Anzahl der Dateien, Ordnerstruktur, Zeitpunkte, IP-Adressen beim Zugriff, Benutzername und E-Mail-Adresse.
+### How Sharing Works Without Exposing the Key
+
+```
+[https://cloud.yourname.workers.dev/s/](https://cloud.yourname.workers.dev/s/)<shareId>#<FileKey>
+                                              └─ Fragment: never sent to the server by the browser
+```
+
+The guest downloads the encrypted file and decrypts it locally using the key from the `#` fragment. They only get access to that single file – no login, no access to other files. With **Burn after reading**, the link becomes invalid as soon as the download starts, and the file is deleted once the transfer completes.
+
+### What the Server Still Sees
+Zero-knowledge applies to contents and names. **Metadata** remains visible: file sizes, number of files, folder structure, timestamps, IP addresses upon access, username, and email address.
 
 ---
 
 ## Limits
 
-Im kostenlosen Cloudflare-Tarif:
+On the free Cloudflare tier:
 
-| Ressource | Limit |
+| Resource | Limit |
 |---|---|
-| Speicherplatz (Workers KV) | **1 GB** gesamt |
-| Uploads | ca. 1.000 Chunks à 24 MB pro Tag (≈ 24 GB/Tag) |
-| Datenbank (D1) | 500 MB – reicht für Hunderttausende Dateieinträge |
-| Worker-Anfragen | 100.000 pro Tag |
-| ZIP-Download | wird im Arbeitsspeicher gebaut, max. ca. 4 GB |
+| Storage (Workers KV) | **1 GB** total |
+| Uploads | approx. 1,000 chunks of 24 MB per day (≈ 24 GB/day) |
+| Database (D1) | 500 MB – enough for hundreds of thousands of file entries |
+| Worker Requests | 100,000 per day |
+| ZIP Download | built in RAM, max. approx. 4 GB |
 
-Das Speicherlimit lässt sich in `wrangler.toml` über `QUOTA_GB` anpassen. Für mehr als 1 GB kann der Speicher auf **Cloudflare R2** (10 GB kostenlos, benötigt Zahlungsmethode) umgestellt werden – die API ist bereits darauf ausgelegt, nur `worker.js` und `wrangler.toml` müssen angepasst werden.
+The storage limit can be adjusted in `wrangler.toml` via `QUOTA_GB`. For more than 1 GB, storage can be switched to **Cloudflare R2** (10 GB free, requires a payment method) – the API is already designed for it; only `worker.js` and `wrangler.toml` need to be adapted.
 
 ---
 
-## Projektstruktur
+## Project Structure
 
 ```
 zk-drive/
-├─ deploy.bat              Ein-Klick-Deployment (Windows)
-├─ deploy.mjs              Deployment-Logik (Node.js)
-├─ wrangler.toml           Cloudflare-Konfiguration (D1, KV, Assets)
-├─ worker.js               Einstieg: /api/* → API, alles andere → statische Dateien
-├─ schema.sql              Tabellen: users, sessions, folders, files, chunks, shares, reset_codes
+├─ deploy.bat              One-click deployment (Windows)
+├─ deploy.mjs              Deployment logic (Node.js)
+├─ wrangler.toml           Cloudflare configuration (D1, KV, Assets)
+├─ worker.js               Entry point: /api/* → API, everything else → static files
+├─ schema.sql              Tables: users, sessions, folders, files, chunks, shares, reset_codes
 ├─ functions/api/
-│  └─ [[route]].js         REST- & Streaming-API
+│  └─ [[route]].js         REST & streaming API
 └─ public/
-   ├─ index.html           App-Oberfläche, Login, Share-Ansicht, Dialoge
-   ├─ app.js               Zustand, Rendering, Kontextmenü, Drag & Drop, Shortcuts
-   ├─ crypto.js            Web Crypto (PBKDF2, AES-GCM) + ZIP-Builder
-   ├─ addons.js            Addon-System + eingebaute Addons
-   ├─ style.css            Layout, Raster/Liste, Animationen
+   ├─ index.html           App UI, login, share view, dialogs
+   ├─ app.js               State, rendering, context menu, drag & drop, shortcuts
+   ├─ crypto.js            Web Crypto (PBKDF2, AES-GCM) + ZIP builder
+   ├─ addons.js            Addon system + built-in addons
+   ├─ style.css            Layout, grid/list view, animations
    └─ themes.css           Light, Dark, Nightmare
 ```
 
 ---
 
-## Addons schreiben
+## Writing Addons
 
-Neue Funktionen lassen sich ohne Eingriff in den Kern ergänzen:
+New features can be added without modifying the core code:
 
 ```js
 Drive.registerAddon({
-  name: 'hallo-welt',
+  name: 'hello-world',
 
-  // Eintrag im Rechtsklick-Menü
+  // Entry in the right-click context menu
   onContextMenu(items, ctx) {
-    items.push({ label: 'Hallo sagen', run: () => Drive.toast('Hallo!') });
+    items.push({ label: 'Say hello', run: () => Drive.toast('Hello!') });
   },
 
-  // Eigene Vorschau für bestimmte Dateitypen – Element zurückgeben oder null
+  // Custom preview for specific file types – return a DOM element or null
   onPreview(file, blob) { return null; },
 
-  // Button in der Toolbar
+  // Button in the toolbar
   onToolbar(container) {},
 
-  // Vor dem Upload: Datei verändern oder mit false ablehnen
+  // Before upload: modify the file or reject it by returning false
   beforeUpload(file) { return file; }
 });
 ```
 
-Eingebaute Addons (in `public/addons.js`): Schnellvorschau, ZIP-Download, verschlüsselte Notizen, Speicheranzeige.
+Built-in addons (in `public/addons.js`): Quick preview, ZIP download, encrypted notes, storage indicator.
 
 ---
 
-## Manuelles Deployment
+## Manual Deployment
 
-Falls du `deploy.bat` nicht nutzen willst:
+If you prefer not to use `deploy.bat`:
 
 ```bash
 npx wrangler login
-npx wrangler d1 create zk-drive                 # database_id in wrangler.toml eintragen
+npx wrangler d1 create zk-drive                 # add database_id to wrangler.toml
 npx wrangler d1 execute zk-drive --remote --file=schema.sql
-npx wrangler kv namespace create zk-drive-files # id in wrangler.toml eintragen
+npx wrangler kv namespace create zk-drive-files # add id to wrangler.toml
 npx wrangler deploy
 npx wrangler secret put MAIL_API_KEY            # optional
 npx wrangler secret put MAIL_FROM               # optional
@@ -226,14 +226,14 @@ npx wrangler secret put MAIL_FROM               # optional
 
 ---
 
-## Fehlerbehebung
+## Troubleshooting
 
-| Problem | Lösung |
+| Issue | Solution |
 |---|---|
-| `Node.js fehlt` | Node.js installieren, Fenster schließen, `deploy.bat` neu starten |
-| Windows: „Der Computer wurde geschützt“ | **Weitere Informationen → Trotzdem ausführen** |
-| Seite lädt nach dem Deploy nicht | 2–5 Minuten warten, neue Subdomains brauchen etwas |
-| Hinweis „Erwartet war …“ | Deine workers.dev-Subdomain heißt anders – den angezeigten Link nutzen |
-| „Speicherplatz voll“ | 1-GB-Grenze erreicht – Papierkorb leeren oder auf R2 umstellen |
-| Reset-Mail kommt nicht an | Mail-Key prüfen bzw. Code per `npx wrangler tail` im Log lesen |
-| Logs ansehen | `npx wrangler tail` im Projektordner |
+| `Node.js missing` | Install Node.js, close the window, restart `deploy.bat` |
+| Windows: "Windows protected your PC" | Click **More info → Run anyway** |
+| Page doesn't load after deployment | Wait 2–5 minutes; new subdomains take a moment to propagate |
+| Notice "Expected …" | Your workers.dev subdomain has a different name – use the displayed link |
+| "Storage full" | 1 GB limit reached – empty the trash or switch to R2 |
+| Reset email doesn't arrive | Check your mail key or read the code in the logs via `npx wrangler tail` |
+| View logs | Run `npx wrangler tail` in the project folder |
