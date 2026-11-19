@@ -1,0 +1,33 @@
+:root, [data-theme=light] {
+  --bg: #ffffff; --bg2: #f8fafd; --main: #ffffff; --panel: #ffffff; --hover: #eef2f9; --sel: #c2e7ff; --selt: #001d35;
+  --text: #1f1f1f; --muted: #5f6368; --border: #e0e3e7; --accent: #0b57d0; --accent2: #d3e3fd; --accentt: #ffffff;
+  --link: #0b57d0; --bar: #0b57d0; --danger: #b3261e; --ok: #188038; --warn: #8a5300; --toast: #303030;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 6px 20px rgba(0,0,0,.10); --glow: none; --bgimg: none; --overlay: rgba(32,33,36,.45);
+}
+[data-theme=dark] {
+  --bg: #0f1117; --bg2: #181b24; --main: #13161e; --panel: #1d212c; --hover: #252a38; --sel: #2b3a55; --selt: #e6edf7;
+  --text: #e6e8ee; --muted: #9aa3b2; --border: #2a2f3c; --accent: #8ab4f8; --accent2: #25324a; --accentt: #0f1117;
+  --link: #8ab4f8; --bar: #8ab4f8; --danger: #f28b82; --ok: #81c995; --warn: #fdd663; --toast: #2d3240;
+  --shadow: 0 8px 28px rgba(0,0,0,.55); --glow: none; --bgimg: none; --overlay: rgba(0,0,0,.6);
+}
+[data-theme=nightmare] {
+  --bg: #090514; --bg2: #120a24; --main: rgba(18,10,36,.55); --panel: #150b2b; --hover: #1f1142; --sel: #2c1460; --selt: #eef6ff;
+  --text: #e0f2fe; --muted: #a99cc9; --border: #2e1a55; --accent: #9d4edd; --accent2: #2a1150; --accentt: #ffffff;
+  --link: #00bbf9; --bar: linear-gradient(90deg, #3a86ff, #00bbf9); --danger: #ff4d9d; --ok: #00bbf9; --warn: #ffd166; --toast: #1d0f3d;
+  --shadow: 0 0 0 1px rgba(157,78,221,.25), 0 10px 40px rgba(157,78,221,.28);
+  --glow: 0 0 0 1px #c77dff, 0 0 18px rgba(199,125,255,.55);
+  --bgimg: radial-gradient(circle at 15% 0%, rgba(157,78,221,.22), transparent 45%), radial-gradient(circle at 95% 100%, rgba(0,187,249,.14), transparent 45%), radial-gradient(circle at 60% 50%, rgba(58,134,255,.06), transparent 60%);
+  --overlay: rgba(5,2,14,.7);
+}
+[data-theme=nightmare] h1, [data-theme=nightmare] .logo { text-shadow: 0 0 12px rgba(199,125,255,.8); }
+[data-theme=nightmare] .logo svg { filter: drop-shadow(0 0 6px #c77dff); }
+[data-theme=nightmare] .item.sel, [data-theme=nightmare] .btn.primary, [data-theme=nightmare] .nav.on,
+[data-theme=nightmare] input:focus, [data-theme=nightmare] select:focus, [data-theme=nightmare] textarea:focus { box-shadow: var(--glow); }
+[data-theme=nightmare] .item:hover { box-shadow: 0 0 0 1px rgba(157,78,221,.45), 0 0 16px rgba(157,78,221,.25); }
+[data-theme=nightmare] .btn.primary { background: linear-gradient(135deg, #9d4edd, #7b2cbf); }
+[data-theme=nightmare] .btn.primary:hover { box-shadow: 0 0 0 1px #c77dff, 0 0 26px rgba(199,125,255,.75); }
+[data-theme=nightmare] .bar i { box-shadow: 0 0 10px #00bbf9; }
+[data-theme=nightmare] a, [data-theme=nightmare] .crumb:hover { text-shadow: 0 0 8px rgba(0,187,249,.6); }
+[data-theme=nightmare] .ic.folder { color: #c77dff; filter: drop-shadow(0 0 4px rgba(199,125,255,.6)); }
+[data-theme=nightmare] .card, [data-theme=nightmare] .modal { animation: pop .25s, breathe 6s ease-in-out infinite; }
+@keyframes breathe { 50% { box-shadow: 0 0 0 1px rgba(157,78,221,.4), 0 10px 50px rgba(157,78,221,.45); } }

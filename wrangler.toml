@@ -1,0 +1,25 @@
+name = "cloud"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*"]
+
+# database_id wird von deploy.bat automatisch eingetragen.
+[[d1_databases]]
+binding = "DB"
+database_name = "zk-drive"
+database_id = "8591be27-f7a1-4c16-b438-f46048120358"
+
+# Dateiinhalte liegen in Workers KV (kostenlos: 1 GB). kv-id wird von deploy.bat eingetragen.
+[[kv_namespaces]]
+binding = "FILES"
+id = "4d3f978b2fb74edd94b7e0be91c71d26"
+
+[vars]
+QUOTA_GB = "1"
+# Secrets (nicht hier eintragen): MAIL_API_KEY, MAIL_FROM – fragt deploy.bat ab.

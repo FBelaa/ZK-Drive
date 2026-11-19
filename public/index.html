@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<title>ZK Drive</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4' fill='none' stroke='%230b57d0' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/themes.css">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<section id="scr-load" class="scr center"><div class="spin"></div></section>
+
+<section id="scr-setup" class="scr center" hidden>
+  <form id="f-setup" class="card">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"/></svg><span>ZK Drive</span></div>
+    <h1>Drive einrichten</h1>
+    <p class="muted">Zero-Knowledge: Dein Passwort und deine Schlüssel verlassen nie den Browser.</p>
+    <input name="user" placeholder="Benutzername" required autocomplete="username" maxlength="64">
+    <input name="email" type="email" placeholder="E-Mail (für Passwort-Reset)" required autocomplete="email">
+    <input name="pw" type="password" placeholder="Passwort (min. 10 Zeichen)" minlength="10" required autocomplete="new-password">
+    <input name="pw2" type="password" placeholder="Passwort wiederholen" required autocomplete="new-password">
+    <p class="err"></p>
+    <button class="btn primary">Tresor erstellen</button>
+  </form>
+</section>
+
+<section id="scr-login" class="scr center" hidden>
+  <form id="f-login" class="card">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"/></svg><span>ZK Drive</span></div>
+    <h1>Anmelden</h1>
+    <input name="user" placeholder="Benutzername" required autocomplete="username">
+    <input name="pw" type="password" placeholder="Passwort" required autocomplete="current-password">
+    <p class="err"></p>
+    <button class="btn primary">Anmelden</button>
+    <a href="#" id="to-reset" class="small">Passwort vergessen?</a>
+  </form>
+</section>
+
+<section id="scr-unlock" class="scr center" hidden>
+  <form id="f-unlock" class="card">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"/></svg><span>ZK Drive</span></div>
+    <h1>Tresor entsperren</h1>
+    <p class="muted">Angemeldet als <b id="unlock-user"></b>. Der Schlüssel wird nur im Arbeitsspeicher gehalten – nach jedem Neuladen bitte erneut entsperren.</p>
+    <input name="pw" type="password" placeholder="Passwort" required autocomplete="current-password">
+    <p class="err"></p>
+    <button class="btn primary">Entsperren</button>
+    <a href="#" id="unlock-out" class="small">Abmelden</a>
+  </form>
+</section>
+
+<section id="scr-reset" class="scr center" hidden>
+  <form id="f-reset1" class="card">
+    <h1>Passwort zurücksetzen</h1>
+    <p class="muted">Wir senden einen 6-stelligen Code an die hinterlegte E-Mail-Adresse.</p>
+    <input name="user" placeholder="Benutzername" required autocomplete="username">
+    <p class="err"></p>
+    <button class="btn primary">Code senden</button>
+    <a href="#" class="to-login small">Zurück zur Anmeldung</a>
+  </form>
+  <form id="f-reset2" class="card" hidden>
+    <h1>Neues Passwort</h1>
+    <p class="muted">Code aus der E-Mail (15 Min. gültig) und Wiederherstellungscode eingeben. Deine Dateien bleiben erhalten.</p>
+    <input name="code" placeholder="6-stelliger Code" inputmode="numeric" maxlength="6" required autocomplete="one-time-code">
+    <input name="rec" placeholder="Wiederherstellungscode XXXX-XXXX-…" required autocomplete="off" spellcheck="false">
+    <input name="pw" type="password" placeholder="Neues Passwort (min. 10 Zeichen)" minlength="10" required autocomplete="new-password">
+    <input name="pw2" type="password" placeholder="Neues Passwort wiederholen" required autocomplete="new-password">
+    <p class="err"></p>
+    <button class="btn primary">Passwort setzen</button>
+    <a href="#" class="to-login small">Zurück zur Anmeldung</a>
+  </form>
+</section>
+
+<section id="scr-share" class="scr center" hidden><div id="share-box" class="card"><div class="spin"></div></div></section>
+
+<section id="scr-app" class="scr" hidden>
+  <aside id="side">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"/></svg><span>ZK Drive</span></div>
+    <div id="newwrap">
+      <button id="btn-new" type="button" class="btn new"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Neu</button>
+      <div id="newmenu" class="menu" hidden>
+        <button type="button" data-a="upload"><svg viewBox="0 0 24 24"><path d="M12 20V8M6 13l6-6 6 6M5 4h14"/></svg><span>Datei hochladen</span></button>
+        <button type="button" data-a="folderup"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 10v6M9 13l3-3 3 3"/></svg><span>Ordner hochladen</span></button>
+        <button type="button" data-a="mkdir"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM12 10v6M9 13h6"/></svg><span>Neuer Ordner</span></button>
+      </div>
+    </div>
+    <a id="nav-drive" class="nav" data-drop=""><svg viewBox="0 0 24 24"><path d="M3 15h18l-3-9H6zM3 15v4h18v-4M7 17h.01"/></svg>Mein Drive</a>
+    <a id="nav-trash" class="nav"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Papierkorb</a>
+    <div id="storage"></div>
+    <div class="spacer"></div>
+    <div class="themes" role="group" aria-label="Design"><button type="button" data-t="light">Hell</button><button type="button" data-t="dark">Dunkel</button><button type="button" data-t="nightmare">Nightmare</button></div>
+    <a id="nav-settings" class="nav"><svg viewBox="0 0 24 24"><path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>Einstellungen</a>
+    <a id="nav-out" class="nav"><svg viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/></svg>Abmelden <small id="me" class="muted"></small></a>
+  </aside>
+  <main id="main">
+    <header class="top">
+      <button id="btn-side" type="button" class="iconbtn only-mobile" aria-label="Menü"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <label class="search"><svg viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input id="search" type="search" placeholder="In Drive suchen (Strg+K)" autocomplete="off"></label>
+      <button id="btn-view" type="button" class="iconbtn" title="Ansicht wechseln"></button>
+    </header>
+    <div class="bar2"><nav id="crumbs"></nav><button id="btn-empty" type="button" class="btn danger" hidden>Papierkorb leeren</button></div>
+    <div class="head-row"><span></span><span>Name</span><span>Größe</span><span>Geändert</span></div>
+    <div id="items" class="items list"></div>
+  </main>
+  <input type="file" id="up-file" multiple hidden>
+  <input type="file" id="up-dir" webkitdirectory multiple hidden>
+</section>
+
+<div id="drop" hidden><div>Dateien loslassen zum verschlüsselten Hochladen</div></div>
+<div id="ctx" class="menu" hidden></div>
+<div id="prog" hidden><header>Übertragungen</header><div class="pl"></div></div>
+<div id="toasts"></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
